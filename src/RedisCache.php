@@ -114,4 +114,44 @@ class RedisCache
 		
 		return $value;
 	}
+	
+	// 删除缓存key
+	public static function remove($key)
+	{
+		// 缓存key
+		$key = trim($key);
+		
+		// 缓存key无效
+		if (strlen($key) < 1) {
+			return;
+		}
+		
+		// 配置
+		$config = config('plugin.cgophp.webman-redis-cache.app');
+		
+		// key加前缀
+		$key = implode('_', [
+			$config['prefix'],
+			$key,
+		]);
+		
+		// 连接redis
+		$redis = static::connect();
+		
+		try {
+			// 删除缓存key
+			$result = $redis->del($key);
+		} catch (\Throwable $error) {
+			// 记录错误日志
+			Log::error('[webman-redis-cache-error]' . $error->getMessage());
+			
+			// 发生异常时重连一次
+			$redis = static::connect('reconnect');
+			
+			// 重连后再次删除缓存key
+			$result = $redis->del($key);
+		}
+		
+		return $result > 0;
+	}
 }

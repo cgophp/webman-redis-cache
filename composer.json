@@ -1,0 +1,14 @@
+{
+  "name": "cgophp/webman-redis-cache",
+  "type": "library",
+  "license": "MIT",
+  "description": "Webman plugin cgophp/webman-redis-cache",
+  "require": {
+    "php": ">=7.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cgophp\\WebmanRedisCache\\": "src"
+    }
+  }
+}

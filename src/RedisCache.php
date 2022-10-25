@@ -59,7 +59,7 @@ class RedisCache
 
         // 缓存key无效
         if (strlen($key) < 1) {
-            return;
+            return null;
         }
 
         // 配置
@@ -96,7 +96,7 @@ class RedisCache
         $value = $callback();
 
         if (is_null($value)) {
-            return;
+            return null;
         }
 
         // 缓存时间
@@ -118,7 +118,7 @@ class RedisCache
 
         // 缓存key无效
         if (strlen($key) < 1) {
-            return;
+            return false;
         }
 
         // 配置

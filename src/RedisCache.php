@@ -66,10 +66,7 @@ class RedisCache
         $config = config('plugin.cgophp.webman-redis-cache.app');
 
         // key加前缀
-        $key = implode('_', [
-            $config['prefix'],
-            $key,
-        ]);
+        $key = implode('_', [$config['prefix'], $key]);
 
         // 连接redis
         $redis = static::connect();
@@ -77,9 +74,9 @@ class RedisCache
         try {
             // 获取数据
             $raw = $redis->get($key);
-        } catch (\Throwable $error) {
+        } catch (\Throwable $e) {
             // 记录错误日志
-            Log::error('[webman-redis-cache-error]' . $error->getMessage());
+            Log::error('[webman-redis-cache-error]' . $e->getMessage());
 
             // 发生异常时重连一次
             $redis = static::connect('reconnect');
@@ -108,9 +105,7 @@ class RedisCache
         $expire = min($expire, $config['max_expire']);
 
         // 设置缓存
-        $redis->setEx($key, $expire, serialize([
-            'value' => $value,
-        ]));
+        $redis->setEx($key, $expire, serialize(['value' => $value]));
 
         return $value;
     }
@@ -130,10 +125,7 @@ class RedisCache
         $config = config('plugin.cgophp.webman-redis-cache.app');
 
         // key加前缀
-        $key = implode('_', [
-            $config['prefix'],
-            $key,
-        ]);
+        $key = implode('_', [$config['prefix'], $key]);
 
         // 连接redis
         $redis = static::connect();
@@ -141,9 +133,9 @@ class RedisCache
         try {
             // 删除缓存key
             $result = $redis->del($key);
-        } catch (\Throwable $error) {
+        } catch (\Throwable $e) {
             // 记录错误日志
-            Log::error('[webman-redis-cache-error]' . $error->getMessage());
+            Log::error('[webman-redis-cache-error]' . $e->getMessage());
 
             // 发生异常时重连一次
             $redis = static::connect('reconnect');

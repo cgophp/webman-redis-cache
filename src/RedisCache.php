@@ -51,6 +51,16 @@ class RedisCache
         return $redis;
     }
 
+    // 获取带前缀的key
+    private static function getPrefixKey($key): string
+    {
+        // 前缀
+        $prefix = config('plugin.cgophp.webman-redis-cache.app.prefix');
+
+        // 加前缀
+        return implode('_', [$prefix, $key]);
+    }
+
     // 获取redis缓存数据
     public static function get($key, $callback, $expire = 0)
     {
@@ -62,11 +72,8 @@ class RedisCache
             return null;
         }
 
-        // 配置
-        $config = config('plugin.cgophp.webman-redis-cache.app');
-
         // key加前缀
-        $key = implode('_', [$config['prefix'], $key]);
+        $key = static::getPrefixKey($key);
 
         // 连接redis
         $redis = static::connect();
@@ -99,6 +106,9 @@ class RedisCache
             return null;
         }
 
+        // 配置
+        $config = config('plugin.cgophp.webman-redis-cache.app');
+
         // 缓存时间
         $expire = intval($expire);
         $expire = $expire > 0 ? $expire : $config['default_expire'];
@@ -121,11 +131,8 @@ class RedisCache
             return false;
         }
 
-        // 配置
-        $config = config('plugin.cgophp.webman-redis-cache.app');
-
         // key加前缀
-        $key = implode('_', [$config['prefix'], $key]);
+        $key = static::getPrefixKey($key);
 
         // 连接redis
         $redis = static::connect();
